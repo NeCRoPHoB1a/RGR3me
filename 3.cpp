@@ -10,15 +10,17 @@ class Time
 {
 public:
 	int h, m;
+	string b;
 	bool ld=false;
 	void set_time(string s)
 	{
-		h = stoi(s.substr(0, 1));
+		b = s;
+		h = stoi(s.substr(0, 3));
 		m = stoi(s.substr(3, 4));
 	}
 	string get_time()
 	{
-		return to_string(h) + ":" + to_string(m);
+		return b;
 	}
 };
 Time operator - (Time c1, Time c2)
@@ -48,7 +50,7 @@ Time operator - (Time c1, Time c2)
 		return b;
 	}
 }
-bool operator > (Time c1, Time c2)
+/*bool operator > (Time c1, Time c2)
 {
 	int h1 = c1.h, m1 = c1.m;
 	int	h2 = c2.h, m2 = c2.m;
@@ -63,7 +65,7 @@ bool operator > (Time c1, Time c2)
 		if (c1.ld) { return t1 > t2 + 24 * 60; }
 		if (c2.ld) { return t1 + 24 * 60 > t2; }
 	}
-}
+}*/
 
 bool operator < (Time c1, Time c2)
 {
@@ -73,13 +75,11 @@ bool operator < (Time c1, Time c2)
 	h2 *= 60;
 	int t1 = h1 + m1;
 	int t2 = h2 + m2;
-	if (!(!c1.ld && !c2.ld)) { return t1 < t2; }
-	if (c1.ld && c2.ld) { return t1 < t2; }
-	else
-	{
-		if (c1.ld) { return t1 < t2 + 24 * 60; }
-		if (c2.ld) { return t1 + 24 * 60 < t2; }
-	}
+
+	if (c1.ld) { return t2 += 24 * 60; }
+	if (c2.ld) { return t1 += 24 * 60 ; }
+
+	return t1 < t2;
 }
 struct bus
 {
@@ -136,7 +136,7 @@ int main()
 	Time ts = tf - m;
 	for (int i=0; i < list.size(); i++)
 	{
-		if (list[i].t2 > ts && list[i].t2 < tf) list[i].print();
+		if (ts < list[i].t2 && list[i].t2 < tf) list[i].print();
 	}
 	
 
